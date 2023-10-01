@@ -1,10 +1,16 @@
-let counter = 0;
-let token = "fake-token";
+const refreshToken = require("./refreshToken");
 
-const operation = async () => {
-  console.log(`Haciendo operacion #${counter} con token: ${token}`);
+let token = "anyToken";
 
-  await fetch("https://hub.dummyapis.com/delay?seconds=2");
+const operation = async (counter) => {
+  if (!token || counter % 3 === 0) {
+    token = null;
+    token = await refreshToken(counter);
+  }
+
+  console.log(`Haciendo operacion #${counter}`);
+  await fetch("https://hub.dummyapis.com/delay?seconds=1");
+  console.log(`Operacion #${counter} terminada`);
 };
 
 module.exports = operation;
